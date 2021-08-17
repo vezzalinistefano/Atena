@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Upload new video course
+{% endblock %}
+
+{% block content%}
+    <h1>Upload your new video course</h1>
+    {% crispy form %}
+{#    <form method="post" >#}
+{#        <h1>Upload your new video course</h1>#}
+{#        {% csrf_token %} {#  cross site request forgery #}
+{#        {{ form|crispy }}#}
+{#        <input type="submit" value="Confirm">#}
+{#    </form>#}
+{% endblock %}

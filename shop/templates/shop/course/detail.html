@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Course: {{ object.pk }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ object.title }}</h1>
+    <h3>{{ object.author }}</h3>
+    <p>{{ object.price }}</p>
+{% endblock %}
