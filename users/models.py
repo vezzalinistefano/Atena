@@ -1,11 +1,15 @@
+from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 
-from django.contrib.auth.models import User
-from django.db import models
 
+class UserProfile(AbstractUser):
+    email = models.EmailField(verbose_name='Email')
+    user_photo = models.ImageField(upload_to='profiles/photos',
+                                   verbose_name='Profile picture',
+                                   blank=True)
+    is_teacher = models.BooleanField(default=False,
+                                     verbose_name='Do yo want to be a teacher?')
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    short_bio = models.TextField()
-
-    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
