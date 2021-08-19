@@ -39,18 +39,3 @@ class ProfileView(View):
         return redirect('profile')
 
 
-class UserCreate(CreateView):
-    model = UserProfile
-    template_name = 'users/registration/register.html'
-    success_url = reverse_lazy('homepage')
-    form_class = RegisterForm
-
-
-class UserLogin(LoginView):
-    model = UserProfile
-    template_name = 'users/registration/login.html'
-    success_url = reverse_lazy('homepage')
-
-
-class UserLogout(LogoutView):
-    template_name = 'users/registration/logged_out.html'

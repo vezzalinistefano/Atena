@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'shop.apps.ShopConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'authentication.apps.AuthenticationConfig'
 ]
 
 # Strato SW intermedio, si posizionano tra la business intelligence e ció che viene scritto dal programmatore

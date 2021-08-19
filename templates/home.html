@@ -9,12 +9,12 @@
 
     {% if user.is_authenticated %}
         <p>Hello {{ user.username }}!</p>
-        <a href="{% url 'users:logout' %}">Logout</a><br>
-{#        <a href="{% url 'profile' %}">My profile</a><br>#}
+        <a href="{% url 'authentication:logout' %}">Logout</a><br>
+        <a href="#">My profile</a><br>
 {#        <a href="{% url 'dashboard' %}">Dashboard</a><br>#}
     {% else %}
-        <a href="{% url 'users:register' %}">Sign in</a><br>
-        <a href="{% url 'users:login' %}">Login</a><br>
+        <a href="{% url 'authentication:register' %}">Sign in</a><br>
+        <a href="{% url 'authentication:login' %}">Login</a><br>
     {% endif %}
 
     <a href="{% url 'shop:course-list' %}">CourseList</a><br>
