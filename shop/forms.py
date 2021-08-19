@@ -1,9 +1,8 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from django import forms
 
 from shop.models import Course
-
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
 
 
 class CourseForm(forms.ModelForm):
@@ -21,3 +20,11 @@ class CourseForm(forms.ModelForm):
             'price',
             'url'
         ]
+
+
+def form_validation_error(form):
+    msg = ""
+    for field in form:
+        for error in field.errors:
+            msg += "%s: %s \\n" % (field.label if hasattr(field, 'label') else 'Error', error)
+    return msg
