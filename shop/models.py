@@ -1,11 +1,13 @@
 from django.db import models
 
-from users.models import Profile
+from users.models import UserProfile
 
 
 class Course(models.Model):
     title = models.CharField(max_length=255)
-    teacher = models.ForeignKey(Profile, related_name='course', on_delete=models.PROTECT)
+    teacher = models.ForeignKey(UserProfile,
+                                related_name='course',
+                                on_delete=models.PROTECT)
     price = models.FloatField(default=0.0)
     description = models.TextField()
     url = models.CharField(max_length=255)

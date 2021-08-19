@@ -18,7 +18,7 @@
     {% for course in object_list %}
         <tr>
             <td>{{ course.title }}</td>
-            <td>{{ course.author }}</td>
+            <td>{{ course.teacher.first_name }} {{ course.teacher.last_name }}</td>
             <td>€{{ course.price }}</td>
             <td>
                 <a href="{% url 'shop:course-detail' course.pk %}">detail</a>
@@ -41,4 +41,5 @@
     {% if user.is_authenticated %}
         <a href="{% url 'shop:course-create' %}" type="button" class="btn btn-primary">New Course</a>
     {% endif %}
+    <a href="{% url 'homepage' %}" type="button" class="btn btn-primary">Home</a>
 {% endblock %}

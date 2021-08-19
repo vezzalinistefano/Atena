@@ -23,8 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('maintenance', Maintenance.as_view(), name='maintenance'),
     path('404-not-found', NotFound.as_view(), name='404-not-found'),
-    path('register/', UserCreationView.as_view(), name='user-create'),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('shop/', include('shop.urls')),
+    path('users/', include('users.urls'))
 ]
