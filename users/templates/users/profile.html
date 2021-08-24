@@ -1,7 +1,41 @@
-{% include 'base.html' %}
+{% extends 'base_profile.html' %}
+
 {% block title %}
-    Profile
+    {{ userprofile.username }}'s profile
 {% endblock %}
 
-{% block content %}
+{% block user_info %}
+    <p>{{ userprofile.first_name }} {{ userprofile.last_name }}</p>
+{% endblock %}
+
+{% block thead %}
+    <th>Title</th>
+    <th>Price</th>
+    <th>Detail</th>
+{% endblock %}
+
+{% block tbody %}
+    {% for course in courses %}
+        <tr>
+            <td>{{ course.title }}</td>
+            <td>€{{ course.price }}</td>
+            <td>
+                <a href="{% url 'shop:course-detail' course.pk %}">detail</a>
+                <br>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'shop:course-update' course.pk %}">update</a>
+                {% endif %}
+                <br>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'shop:course-delete' course.pk %}">delete</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block table_after %}
+    {% if user.is_authenticated %}
+        <a href="{% url 'shop:course-create' %}" type="button" class="btn btn-primary">New Course</a>
+    {% endif %}
 {% endblock %}

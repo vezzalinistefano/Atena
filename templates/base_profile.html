@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}
-    {% block list_title %}{% endblock %}
-{% endblock %}
 
 {% block content %}
-    <h1>{% block content_title %}{% endblock %}</h1>
+    {% block user_info %}
+
+    {% endblock %}
+
     <table class="table">
         <thead>
         <tr>
@@ -12,10 +12,13 @@
             {% endblock %}
         </thead>
         <tbody>
-            {% block tbody %}
+        {% block tbody %}
 
-            {% endblock %}
+        {% endblock %}
         </tbody>
     </table>
-    {% block table_after %}{% endblock %}
+
+    {% block table_after %}
+
+    {% endblock %}
 {% endblock %}
