@@ -2,7 +2,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 
-from shop.models import Course
+from shop.models import Course, Purchase
 
 
 class CourseForm(forms.ModelForm):
@@ -18,7 +18,25 @@ class CourseForm(forms.ModelForm):
             'title',
             'description',
             'price',
-            'url'
+            'url',
+            'category',
+            'video'
+        ]
+
+
+class PurchaseForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'purchase_crispy_form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Complete purchase'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    class Meta:
+        model = Purchase
+        exclude = [
+            'buyer',
+            'course_bought',
+            'date',
         ]
 
 

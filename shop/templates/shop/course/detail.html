@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Course: {{ object.pk }}
+{{ object.title }}
 {% endblock %}
 
 {% block content %}
     <h1>{{ object.title }}</h1>
-    <h3>{{ object.author }}</h3>
-    <p>{{ object.price }}</p>
+    <h4>Teacher: {{ object.teacher }}</h4>
+    <div>
+        <video width="500" height="500" controls>
+            <source src="{{ object.video.url }}" type="video/mp4">
+            <b>{{ video.title }}</b>
+        </video>
+    </div>
+    <div>
+        <h5>Comment section:</h5>
+    </div>
 {% endblock %}

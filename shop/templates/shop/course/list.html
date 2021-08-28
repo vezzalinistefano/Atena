@@ -1,10 +1,10 @@
 {% extends 'base_list.html' %}
 
 {% block list_title %}
-    Course
+    Course Shop
 {% endblock %}
 {% block content_title %}
-    Course
+    Course Shop
 {% endblock %}
 
 {% block thead %}
@@ -12,27 +12,20 @@
     <th>Author</th>
     <th>Price</th>
     <th>Detail</th>
+    <th>Buy</th>
 {% endblock %}
 
+{# TODO CAMBIARE ASPETTO SHOP, DA TABELLA A GRIGLIA DI CARTE#}
 {% block tbody %}
     {% for course in object_list %}
         <tr>
             <td>{{ course.title }}</td>
             <td>{{ course.teacher.first_name }} {{ course.teacher.last_name }}</td>
             <td>€{{ course.price }}</td>
+            <td><a href="{% url 'shop:course-detail' course.pk %}">Detail</a></td>
             <td>
-                <a href="{% url 'shop:course-detail' course.pk %}">detail</a>
-                <br>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'shop:course-update' course.pk %}">update</a>
-                {% endif %}
-                <br>
-
-                {% if user.is_authenticated %}
-                    <a href="{% url 'shop:course-delete' course.pk %}">delete</a>
-                {% endif %}
+                <a href="{% url 'shop:course-purchase' course.pk %}" type="button" class="btn btn-outline-success">Buy</a>
             </td>
-
         </tr>
     {% endfor %}
 {% endblock %}
