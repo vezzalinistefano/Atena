@@ -5,20 +5,31 @@
 
     {% endblock %}
 
-    <table class="table">
-        <thead>
-        <tr>
-            {% block thead %}
+    {% if userprofile.is_teacher %}
+        <h3>Published courses</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                {% block thead_teacher %}
+                {% endblock %}
+            </thead>
+            <tbody>
+            {% block tbody_teacher %}
+
             {% endblock %}
-        </thead>
-        <tbody>
-        {% block tbody %}
+            </tbody>
+        </table>
+
+        {% block table_after %}
 
         {% endblock %}
-        </tbody>
-    </table>
 
-    {% block table_after %}
+    {% endif %}
+    <br><br>
+    {% if user.is_authenticated %}
+        <h4>My courses</h4>
+        {% block cards %}
+        {% endblock %}
+    {% endif %}
 
-    {% endblock %}
 {% endblock %}

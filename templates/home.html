@@ -4,19 +4,17 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Homepage</h1>
-    <p>Let's do everything!</p>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col text-center"><h1>Athena</h1></div>
+        <div class="col"></div>
+    </div>
 
-    {% if user.is_authenticated %}
-        <p>Hello {{ user.username }}!</p>
-        <a href="{% url 'authentication:logout' %}">Logout</a><br>
-        <a href="{% url 'users:profile' user.pk %}">My profile</a><br>
-{#        <a href="{% url 'dashboard' %}">Dashboard</a><br>#}
-    {% else %}
-        <a href="{% url 'authentication:register' %}">Sign in</a><br>
-        <a href="{% url 'authentication:login' %}">Login</a><br>
-    {% endif %}
-
-    <a href="{% url 'shop:course-list' %}">CourseList</a><br>
-    <a href="{% url 'homepage' %}">Homepage</a><br>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8 text-center">
+            <h2>The best site to learn everything!</h2>
+        </div>
+        <div class="col-2"></div>
+    </div>
 {% endblock %}

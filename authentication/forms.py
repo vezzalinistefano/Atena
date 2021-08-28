@@ -12,15 +12,15 @@ class RegisterForm(UserCreationForm):
     helper.inputs[0].field_classes = 'btn btn-success'
     helper.form_method = 'POST'
 
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = UserProfile
-        fields = (
-            'username',
+        fields = UserCreationForm.Meta.fields + (
+            'email',
             'first_name',
             'last_name',
-            'email',
             'user_photo',
-            'is_teacher'
+            'is_teacher',
+            'bio'
         )
 
     def save(self, commit=True):
