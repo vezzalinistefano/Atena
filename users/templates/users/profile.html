@@ -1,32 +1,44 @@
 {% extends 'base_profile.html' %}
+{% load static %}
 
 {% block title %}
     {{ userprofile.username }}'s profile
 {% endblock %}
 
 {% block user_info %}
-    <p>{{ userprofile.first_name }} {{ userprofile.last_name }}</p>
+
+    <p class="h3">{{ userprofile.username }}'s profile</p>
+
+    <div class="row">
+        <div class="col-4"><img src="{{ userprofile.user_photo.url }}" class="img-thumbnail" width="300" height="300"
+                                alt="media/profiles/photos/default/img.png">
+        </div>
+        <div class="col-8">
+            <p>{{ userprofile.first_name }} {{ userprofile.last_name }}</p>
+            <p>Email: {{ userprofile.email }}</p>
+        </div>
+    </div>
 {% endblock %}
 
-{% block thead %}
+{# TODO profilo per utenti insegnante e per utenti normali #}
+
+{% block thead_teacher %}
     <th>Title</th>
     <th>Price</th>
-    <th>Detail</th>
+    <th>Manage</th>
+    <th>Total purchases</th>
 {% endblock %}
 
-{% block tbody %}
+{% block tbody_teacher %}
     {% for course in courses %}
         <tr>
-            <td>{{ course.title }}</td>
+            <td><a href="{% url 'shop:course-detail' course.pk %}">{{ course.title }}</a></td>
             <td>€{{ course.price }}</td>
             <td>
-                <a href="{% url 'shop:course-detail' course.pk %}">detail</a>
                 <br>
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and userprofile.pk == user.pk %}
                     <a href="{% url 'shop:course-update' course.pk %}">update</a>
-                {% endif %}
-                <br>
-                {% if user.is_authenticated %}
+                    <br>
                     <a href="{% url 'shop:course-delete' course.pk %}">delete</a>
                 {% endif %}
             </td>
@@ -39,3 +51,16 @@
         <a href="{% url 'shop:course-create' %}" type="button" class="btn btn-primary">New Course</a>
     {% endif %}
 {% endblock %}
+
+{% block cards %}
+    {% for purchase in purchases %}
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ purchase.course_bought.title }}</h5>
+                <p class="card-text">Made by {{ purchase.course_bought.teacher.username }}</p>
+                <a href="{% url 'shop:course-detail' purchase.course_bought.pk %}" class="btn btn-primary">Watch</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+

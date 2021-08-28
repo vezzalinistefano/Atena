@@ -9,6 +9,8 @@ class UserProfile(AbstractUser):
                                    blank=True)
     is_teacher = models.BooleanField(default=False,
                                      verbose_name='Do yo want to be a teacher?')
+    bio = models.TextField(default='',
+                           blank=True)
 
     class Meta:
         verbose_name = 'User'
