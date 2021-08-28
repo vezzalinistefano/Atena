@@ -1,5 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 
 
 class OwnershipMixin(LoginRequiredMixin, UserPassesTestMixin):

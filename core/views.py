@@ -19,6 +19,10 @@ class Homepage(TemplateView):
     template_name = 'home.html'
 
 
+class AccessForbidden(TemplateView):
+    template_name = 'permission_denied.html'
+
+
 class UserCreationView(CreateView):
     form_class = UserCreationForm
     template_name = 'registration/user_create.html'

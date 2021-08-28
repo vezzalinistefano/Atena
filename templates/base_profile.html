@@ -6,23 +6,25 @@
     {% endblock %}
 
     {% if userprofile.is_teacher %}
-        <h3>Published courses</h3>
-        <table class="table">
-            <thead>
-            <tr>
-                {% block thead_teacher %}
+        <div style="margin-top: 20px">
+            <h3>Published courses</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    {% block thead_teacher %}
+                    {% endblock %}
+                </thead>
+                <tbody>
+                {% block tbody_teacher %}
+
                 {% endblock %}
-            </thead>
-            <tbody>
-            {% block tbody_teacher %}
+                </tbody>
+            </table>
+
+            {% block table_after %}
 
             {% endblock %}
-            </tbody>
-        </table>
-
-        {% block table_after %}
-
-        {% endblock %}
+        </div>
 
     {% endif %}
     <br><br>

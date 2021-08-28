@@ -15,12 +15,13 @@
         </div>
         <div class="col-8">
             <p>{{ userprofile.first_name }} {{ userprofile.last_name }}</p>
-            <p>Email: {{ userprofile.email }}</p>
+            <p>Email: {{ userprofile.email }}</p><br>
+            {% if userprofile.pk == user.pk %}
+                <a href="{% url 'users:profile-update' user.pk %}" type="button" class="btn btn-secondary">Edit Profile</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
-
-{# TODO profilo per utenti insegnante e per utenti normali #}
 
 {% block thead_teacher %}
     <th>Title</th>
