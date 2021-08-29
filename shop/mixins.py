@@ -5,7 +5,6 @@ from django.shortcuts import render
 class OwnershipMixin(LoginRequiredMixin, UserPassesTestMixin):
 
     def test_func(self):
-        print(self.kwargs)
         return self.request.user.id == self.kwargs['teacher_id']
 
     def handle_no_permission(self):

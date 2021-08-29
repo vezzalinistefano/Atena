@@ -45,3 +45,6 @@ class Purchase(models.Model):
                                       related_name='course_bought',
                                       on_delete=models.PROTECT)
     date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return f'{self.id} - made by {self.buyer} - course {self.course_bought}'

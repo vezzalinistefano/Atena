@@ -8,6 +8,9 @@
     <h1>{{ object.title }}</h1>
     <h4>Teacher: {{ object.teacher }}</h4>
     <div>
+        {% if purchase %}
+
+        {% endif %}
         <video width="500" height="500" controls>
             <source src="{{ object.video.url }}" type="video/mp4">
             <b>{{ video.title }}</b>

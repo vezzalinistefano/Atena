@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Search results
+{% endblock %}
+
+{% block content %}
+    <h3>You searched for...</h3>
+    <table class="table table-striped">
+        {% for result in search_results %}
+            <tr>
+                <td>{{ result.title }}</td>
+                <td>{{ result.teacher_id }}</td>
+            </tr>
+            {% empty %}
+            <h4>It seems that your research has not produced any results!</h4>
+        {% endfor %}
+    </table>
+{% endblock %}

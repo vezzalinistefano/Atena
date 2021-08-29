@@ -18,7 +18,6 @@ class UserProfileView(DetailView, LoginRequiredMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        print(self.kwargs)
         context['courses'] = Course.objects.filter(teacher_id=self.kwargs['pk'])
         context['purchases'] = Purchase.objects.filter(buyer_id=self.kwargs['pk'])
         return context
@@ -29,4 +28,3 @@ class UserProfileUpdateView(OwnershipMixin, UpdateView):
     template_name = 'users/profile_update.html'
     success_url = reverse_lazy('users:profile')
     form_class = UserProfileForm
-
