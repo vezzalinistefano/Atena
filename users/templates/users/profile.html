@@ -7,17 +7,19 @@
 
 {% block user_info %}
 
-    <p class="h3">{{ userprofile.username }}'s profile</p>
+    <h3 style="text-transform: uppercase">{{ userprofile.username }}'s profile</h3>
 
     <div class="row">
-        <div class="col-4"><img src="{{ userprofile.user_photo.url }}" class="img-thumbnail" width="300" height="300"
+        <div class="col-4"><img src="{{ userprofile.user_photo.url }}" class="img-thumbnail rounded"
+                                style="width: 300px; height: auto"
                                 alt="media/profiles/photos/default/img.png">
         </div>
         <div class="col-8">
-            <p>{{ userprofile.first_name }} {{ userprofile.last_name }}</p>
+            <h4 style="font-weight: bold; text-transform: uppercase">{{ userprofile.first_name }} {{ userprofile.last_name }}</h4>
             <p>Email: {{ userprofile.email }}</p><br>
             {% if userprofile.pk == user.pk %}
-                <a href="{% url 'users:profile-update' user.pk %}" type="button" class="btn btn-secondary">Edit Profile</a>
+                <a href="{% url 'users:profile-update' user.pk %}" type="button" class="btn btn-secondary">Edit
+                    Profile</a>
             {% endif %}
         </div>
     </div>
@@ -31,19 +33,23 @@
 {% endblock %}
 
 {% block tbody_teacher %}
+
     {% for course in courses %}
         <tr>
             <td><a href="{% url 'shop:course-detail' course.pk %}">{{ course.title }}</a></td>
             <td>€{{ course.price }}</td>
             <td>
-                <br>
                 {% if user.is_authenticated and userprofile.pk == user.pk %}
-                    <a href="{% url 'shop:course-update' course.pk %}">update</a>
+                    <a href="{% url 'shop:course-update' course.pk course.teacher_id %}">Update</a>
                     <br>
-                    <a href="{% url 'shop:course-delete' course.pk %}">delete</a>
+                    <a href="{% url 'shop:course-delete' course.pk course.teacher_id %}">Delete</a>
                 {% endif %}
             </td>
         </tr>
+    {% empty %}
+        <div>
+            You haven't published any courses yet! <a href="{% url 'shop:course-create' %}">Upload</a> something now.
+        </div>
     {% endfor %}
 {% endblock %}
 
@@ -61,6 +67,11 @@
                 <p class="card-text">Made by {{ purchase.course_bought.teacher.username }}</p>
                 <a href="{% url 'shop:course-detail' purchase.course_bought.pk %}" class="btn btn-primary">Watch</a>
             </div>
+        </div>
+    {% empty %}
+        <div>
+            You haven't bought any courses yet! Go to the <a href="{% url 'shop:course-list' %}">Shop</a> and find
+            something that you like.
         </div>
     {% endfor %}
 {% endblock %}
