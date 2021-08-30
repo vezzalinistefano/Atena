@@ -54,7 +54,8 @@ class Comment(models.Model):
     user = models.ForeignKey(UserProfile,
                              related_name='comments',
                              on_delete=models.CASCADE)
-    body = models.TextField(max_length=180)
+    body = models.TextField(max_length=180,
+                            verbose_name='Write down your thoughts:')
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

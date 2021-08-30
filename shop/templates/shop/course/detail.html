@@ -15,8 +15,8 @@
     </div>
     <div>
         <br>
-        <h5>Comments:</h5>
-
+        <h4>Comments:</h4>
+        <br>
         {% for comment in course.comments.all %}
             <strong>
                 {{ comment.user.username }} - {{ comment.date_added }}
@@ -29,5 +29,10 @@
         {% empty %}
             Still no comments in here, maybe you could be the first!
         {% endfor %}
+        <br>
+        {% if user.is_authenticated %}
+            <a href="{% url 'shop:add-comment' object.pk %}">Add comment</a>
+        {% endif %}
+
     </div>
 {% endblock %}

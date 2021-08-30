@@ -2,7 +2,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 
-from shop.models import Course, Purchase
+from shop.models import Course, Purchase, Comment
 
 
 class CourseForm(forms.ModelForm):
@@ -36,6 +36,20 @@ class PurchaseForm(forms.ModelForm):
             'buyer',
             'course_bought',
             'date',
+        ]
+
+
+class AddCommentForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'add_comment_crispy_form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Add'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    class Meta:
+        model = Comment
+        fields = [
+            'body',
         ]
 
 

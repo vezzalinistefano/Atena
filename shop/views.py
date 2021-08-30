@@ -5,9 +5,9 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
-from shop.forms import CourseForm, PurchaseForm
-from shop.mixins import OwnershipMixin
-from shop.models import Course, Purchase
+from shop.forms import CourseForm, PurchaseForm, AddCommentForm
+from shop.mixins import OwnershipMixin, CheckPurchaseMixin
+from shop.models import Course, Purchase, Comment
 
 logger = logging.getLogger(__name__)
 
@@ -41,16 +41,9 @@ class CourseUpdate(OwnershipMixin, UpdateView):
     success_url = reverse_lazy('shop:course-list')
 
 
-class CourseDetail(UserPassesTestMixin, DetailView):
+class CourseDetail(CheckPurchaseMixin, DetailView):
     model = Course
     template_name = 'shop/course/detail.html'
-
-    def test_func(self):
-        return (Purchase.objects.filter(course_bought_id=self.kwargs['pk'],
-                                        buyer_id=self.request.user.id).exists())
-
-    def handle_no_permission(self):
-        return render(request=self.request, template_name='permission_denied.html')
 
 
 class CourseList(ListView):
@@ -59,6 +52,7 @@ class CourseList(ListView):
 
 
 class CoursePurchase(LoginRequiredMixin, CreateView):
+    # TODO check if the user has already bought the course
     model = Purchase
     template_name = 'shop/purchase/complete_purchase.html'
     success_url = reverse_lazy('homepage')
@@ -85,3 +79,20 @@ class SearchView(ListView):
         else:
             result = None
         return result
+
+
+class AddCommentView(CheckPurchaseMixin, CreateView):
+    model = Comment
+    template_name = 'shop/comment/add_comment.html'
+    form_class = AddCommentForm
+
+    def get_success_url(self):
+        """
+        This function provides the success url to go back to the commented course page
+        """
+        return reverse_lazy('shop:course-detail', kwargs={'pk': self.kwargs['pk']})
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.course_id = self.kwargs['pk']
+        return super(AddCommentView, self).form_valid(form)
