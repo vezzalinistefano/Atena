@@ -18,7 +18,6 @@ class CourseForm(forms.ModelForm):
             'title',
             'description',
             'price',
-            'url',
             'category',
             'video'
         ]

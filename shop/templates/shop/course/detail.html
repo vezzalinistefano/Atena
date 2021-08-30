@@ -1,22 +1,33 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{{ object.title }}
+    Watch {{ object.title }}
 {% endblock %}
 
 {% block content %}
     <h1>{{ object.title }}</h1>
     <h4>Teacher: {{ object.teacher }}</h4>
-    <div>
-        {% if purchase %}
-
-        {% endif %}
+    <div class="embed-responsive embed-responsive-16by9">
         <video width="500" height="500" controls>
             <source src="{{ object.video.url }}" type="video/mp4">
             <b>{{ video.title }}</b>
         </video>
     </div>
     <div>
-        <h5>Comment section:</h5>
+        <br>
+        <h5>Comments:</h5>
+
+        {% for comment in course.comments.all %}
+            <strong>
+                {{ comment.user.username }} - {{ comment.date_added }}
+            </strong>
+            <br>
+            <p>
+                {{ comment.body }}
+            </p>
+            <hr>
+        {% empty %}
+            Still no comments in here, maybe you could be the first!
+        {% endfor %}
     </div>
 {% endblock %}
