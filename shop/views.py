@@ -12,7 +12,7 @@ from shop.models import Course, Purchase, Comment
 logger = logging.getLogger(__name__)
 
 
-class CourseCreate(LoginRequiredMixin, CreateView):
+class CourseCreate(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Course
     template_name = 'shop/course/create.html'
     success_url = reverse_lazy('shop:course-list')
@@ -21,6 +21,12 @@ class CourseCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.teacher_id = self.request.user.id
         return super(CourseCreate, self).form_valid(form)
+
+    def test_func(self):
+        return self.request.user.is_teacher
+
+    def handle_no_permission(self):
+        return render(request=self.request, template_name='shop/permission/not_a_teacher.html')
 
 
 class CourseDelete(OwnershipMixin, DeleteView):
