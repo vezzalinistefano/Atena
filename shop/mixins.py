@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
 
-from shop.models import Purchase
+from shop.models import Purchase, Course
 
 
 class OwnershipMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -24,4 +24,8 @@ class CheckPurchaseMixin(UserPassesTestMixin):
 
     # TODO handle no permission by rendering to a different page similar to detail.html
     def handle_no_permission(self):
-        return render(request=self.request, template_name='permission_denied.html')
+        print(Course.objects.filter(id=self.kwargs['pk']))
+        context = {'course': Course.objects.get(id=self.kwargs['pk'])}
+        return render(request=self.request,
+                      template_name='shop/course/detail_no_purchase.html',
+                      context=context)
