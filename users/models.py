@@ -3,7 +3,7 @@ from django.db import models
 
 
 class UserProfile(AbstractUser):
-    email = models.EmailField(verbose_name='Email')
+    email = models.EmailField(verbose_name='Email', unique=True)
     user_photo = models.ImageField(upload_to='profiles/photos',
                                    verbose_name='Profile picture',
                                    blank=True)

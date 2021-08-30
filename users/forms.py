@@ -18,7 +18,6 @@ class UserProfileForm(forms.ModelForm):
             'username',
             'first_name',
             'last_name',
-            'is_teacher',
             'user_photo',
             'email',
         )
