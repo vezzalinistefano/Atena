@@ -23,7 +23,8 @@ class CourseCreate(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return super(CourseCreate, self).form_valid(form)
 
     def test_func(self):
-        return self.request.user.is_teacher
+
+        return self.request.user.is_authenticated and self.request.user.is_teacher
 
     def handle_no_permission(self):
         return render(request=self.request, template_name='shop/permission/not_a_teacher.html')
@@ -41,7 +42,6 @@ class CourseUpdate(OwnershipMixin, UpdateView):
     fields = [
         'title',
         'price',
-        'url',
         'description'
     ]
     success_url = reverse_lazy('shop:course-list')

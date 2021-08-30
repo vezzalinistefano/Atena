@@ -7,7 +7,7 @@
 
 {% block user_info %}
 
-    <h3 style="text-transform: uppercase">{{ userprofile.username }}'s profile</h3>
+{#    <h3 style="text-transform: uppercase">{{ userprofile.username }}'s profile</h3>#}
 
     <div class="row">
         <div class="col-4"><img src="{{ userprofile.user_photo.url }}" class="img-thumbnail rounded"
@@ -44,6 +44,9 @@
                     <br>
                     <a href="{% url 'shop:course-delete' course.pk course.teacher_id %}">Delete</a>
                 {% endif %}
+            </td>
+            <td>
+                {{ course.purchases.all.count }}
             </td>
         </tr>
     {% empty %}

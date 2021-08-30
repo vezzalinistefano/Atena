@@ -7,32 +7,18 @@
     Course Shop
 {% endblock %}
 
-{% block thead %}
-    <th>Title</th>
-    <th>Author</th>
-    <th>Price</th>
-    <th>Detail</th>
-    <th>Buy</th>
-{% endblock %}
-
 {# TODO CAMBIARE ASPETTO SHOP, DA TABELLA A GRIGLIA DI CARTE#}
 {% block tbody %}
     {% for course in object_list %}
-        <tr>
-            <td>{{ course.title }}</td>
-            <td>{{ course.teacher.first_name }} {{ course.teacher.last_name }}</td>
-            <td>€{{ course.price }}</td>
-            <td><a href="{% url 'shop:course-detail' course.pk %}">Detail</a></td>
-            <td>
-                <a href="{% url 'shop:course-purchase' course.pk %}" type="button" class="btn btn-outline-success">Buy</a>
-            </td>
-        </tr>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ course.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ course.teacher.username }} | {{ course.category }} |
+                    €{{ course.price }}</h6>
+                <p class="card-text">{{ course.description|truncatewords:"10" }}</p>
+                <a href="{% url 'shop:course-detail' course.pk %}" class="btn btn-secondary">Watch</a>
+            </div>
+        </div>
+        <br>
     {% endfor %}
 {% endblock %}
-
-{#{% block table_after %}#}
-{#    {% if user.is_authenticated %}#}
-{#        <a href="{% url 'shop:course-create' %}" type="button" class="btn btn-primary">New Course</a>#}
-{#    {% endif %}#}
-{#    <a href="{% url 'homepage' %}" type="button" class="btn btn-primary">Home</a>#}
-{#{% endblock %}#}

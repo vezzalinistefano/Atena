@@ -5,12 +5,12 @@ from users.models import UserProfile
 
 class Course(models.Model):
     CATEGORY_CHOICES = [
-        ('SP', 'Sport'),
-        ('FN', 'Finance'),
-        ('SWD', 'Software development'),
-        ('CK', 'Cooking'),
-        ('HL', 'Health'),
-        ('PD', 'Personal development')
+        ('Sport', 'Sport'),
+        ('Finance', 'Finance'),
+        ('Software Development', 'Software development'),
+        ('Cooking', 'Cooking'),
+        ('Health', 'Health'),
+        ('Personal development', 'Personal development')
     ]
 
     title = models.CharField(max_length=255)

@@ -1,5 +1,11 @@
 {% extends 'permission_denied.html' %}
 
 {% block reason %}
-    Seems like you are not a teacher
+    {% if user.is_authenticated %}
+        Seems like you are not a teacher
+    {% else %}
+        You need to <a href="{% url 'authentication:register' %}">Sign in</a> or
+        <a href="{% url 'authentication:login' %}">Log in</a> to access this page
+    {% endif %}
+
 {% endblock %}
