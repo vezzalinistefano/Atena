@@ -29,7 +29,7 @@ class Course(models.Model):
     # TODO di che pacchetto fa parte il corso
     video = models.FileField(upload_to='courses/',
                              blank=True)
-    url = models.URLField
+    url = models.URLField()
 
     class Meta:
         verbose_name = 'course'

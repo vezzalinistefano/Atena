@@ -51,18 +51,17 @@ class CreateViewVimeo(View):
                 key=f'{constants.CLIENT_ID}',
                 secret=f'{constants.CLIENT_SECRET}'
             )
-            uri = client.upload(data['video'].temporary_file_path(),
+            uri = client.upload(request.FILES['video'].temporary_file_path(),
                                 data={
-                                    'name': f'{["title"]}',
-                                    'description': "description"
+                                    'name': f'{post_data["title"]}',
+                                    'description': f'{post_data["description"]}'
                                 })
-
             Course.objects.create(
                 title=post_data['title'],
                 teacher=request.user,
                 price=float(post_data['price']),
                 description=post_data['description'],
-                url=f'https://player.vimeo.com/video/{uri}'
+                url=f'{uri.replace("/videos/", "")}'
             )
             return HttpResponseRedirect(reverse_lazy('shop:course-list'))
         else:
