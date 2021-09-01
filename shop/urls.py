@@ -3,12 +3,13 @@ from django.urls import path
 
 from core import settings
 from shop.views import CourseDetail, CourseList, CourseCreate, CourseUpdate, CourseDelete, CoursePurchase, SearchView, \
-    AddCommentView
+    AddCommentView, CreateViewVimeo
 
 app_name = 'shop'
 
 urlpatterns = [
-    path('course/create', CourseCreate.as_view(), name='course-create'),
+    path('course/create', CreateViewVimeo.as_view(), name='course-create'),
+    # path('course/create', CourseCreate.as_view(), name='course-create'),
     path('course/<int:pk>/<int:teacher_id>/update', CourseUpdate.as_view(), name='course-update'),
     path('course/<int:pk>/<int:teacher_id>/delete', CourseDelete.as_view(), name='course-delete'),
     path('course/<int:pk>/detail', CourseDetail.as_view(), name='course-detail'),

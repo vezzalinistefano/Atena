@@ -1,11 +1,15 @@
 import logging
 
+import vimeo
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
-from shop.forms import CourseForm, PurchaseForm, AddCommentForm
+import constants
+from shop.forms import CourseForm, PurchaseForm, AddCommentForm, CourseUploadForm
 from shop.mixins import OwnershipMixin, CheckPurchaseMixin
 from shop.models import Course, Purchase, Comment
 
@@ -23,11 +27,46 @@ class CourseCreate(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return super(CourseCreate, self).form_valid(form)
 
     def test_func(self):
-
         return self.request.user.is_authenticated and self.request.user.is_teacher
 
     def handle_no_permission(self):
         return render(request=self.request, template_name='shop/permission/not_a_teacher.html')
+
+
+class CreateViewVimeo(View):
+    form_class = CourseUploadForm
+    template_name = 'shop/course/create.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        data = self.form_class(request.POST, request.FILES)
+        post_data = request.POST
+
+        if data.is_valid():
+            client = vimeo.VimeoClient(
+                token=f'{constants.ACCESS_TOKEN}',
+                key=f'{constants.CLIENT_ID}',
+                secret=f'{constants.CLIENT_SECRET}'
+            )
+            uri = client.upload(data['video'].temporary_file_path(),
+                                data={
+                                    'name': f'{["title"]}',
+                                    'description': "description"
+                                })
+
+            Course.objects.create(
+                title=post_data['title'],
+                teacher=request.user,
+                price=float(post_data['price']),
+                description=post_data['description'],
+                url=f'https://player.vimeo.com/video/{uri}'
+            )
+            return HttpResponseRedirect(reverse_lazy('shop:course-list'))
+        else:
+            return render(request, 'shop/course/create.html', {'form': data})
 
 
 class CourseDelete(OwnershipMixin, DeleteView):

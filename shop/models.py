@@ -13,18 +13,23 @@ class Course(models.Model):
         ('Personal development', 'Personal development')
     ]
 
-    title = models.CharField(max_length=255)
+    MAX_LENGTH = 60
+    MIN_LENGTH = 10
+
+    title = models.CharField(max_length=MAX_LENGTH)
     teacher = models.ForeignKey(UserProfile,
                                 related_name='teacher',
                                 on_delete=models.PROTECT)
-    price = models.FloatField(default=0.0)
+    price = models.FloatField(default=1.0)
     description = models.TextField()
-    category = models.CharField(max_length=60,
+    category = models.CharField(max_length=MAX_LENGTH,
                                 choices=CATEGORY_CHOICES,
                                 default='Misc')
 
     # TODO di che pacchetto fa parte il corso
-    video = models.FileField(upload_to='courses/')
+    video = models.FileField(upload_to='courses/',
+                             blank=True)
+    url = models.URLField
 
     class Meta:
         verbose_name = 'course'
@@ -60,3 +65,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.course.title} - {self.user.username}'
+
+

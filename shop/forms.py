@@ -1,6 +1,7 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
+from django.core.validators import MinValueValidator
 
 from shop.models import Course, Purchase, Comment
 
@@ -51,6 +52,19 @@ class AddCommentForm(forms.ModelForm):
         fields = [
             'body',
         ]
+
+
+class CourseUploadForm(forms.Form):
+    helper = FormHelper()
+    helper.form_id = 'add_comment_crispy_form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Add'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    title = forms.CharField(label='Course title', max_length=Course.MAX_LENGTH, min_length=Course.MIN_LENGTH)
+    price = forms.FloatField(label='Price', initial=1.0, min_value=0.1)
+    description = forms.CharField(widget=forms.Textarea, min_length=10)
+    video = forms.FileField(required=True)
 
 
 def form_validation_error(form):

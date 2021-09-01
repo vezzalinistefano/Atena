@@ -9,7 +9,6 @@ class OwnershipMixin(LoginRequiredMixin, UserPassesTestMixin):
     Check if the user who is trying to do certain operations on the
     course is its creator
     """
-
     def test_func(self):
         return self.request.user.id == self.kwargs['teacher_id']
 
@@ -19,12 +18,16 @@ class OwnershipMixin(LoginRequiredMixin, UserPassesTestMixin):
 
 class CheckPurchaseMixin(UserPassesTestMixin):
     def test_func(self):
-        return (Purchase.objects.filter(course_bought_id=self.kwargs['pk'],
+        check_purchase = (Purchase.objects.filter(course_bought_id=self.kwargs['pk'],
                                         buyer_id=self.request.user.id).exists())
+        course = Course.objects.get(id=self.kwargs['pk'])
+        check_if_teacher = course.teacher_id == self.request.user.id
+
+        print(f'{course.teacher_id} - {check_if_teacher}')
+        return check_purchase or check_if_teacher
 
     # TODO handle no permission by rendering to a different page similar to detail.html
     def handle_no_permission(self):
-        print(Course.objects.filter(id=self.kwargs['pk']))
         context = {'course': Course.objects.get(id=self.kwargs['pk'])}
         return render(request=self.request,
                       template_name='shop/course/detail_no_purchase.html',
