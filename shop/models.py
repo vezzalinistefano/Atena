@@ -14,7 +14,7 @@ class Course(models.Model):
     ]
 
     MAX_LENGTH = 60
-    MIN_LENGTH = 10
+    MIN_LENGTH = 3
 
     title = models.CharField(max_length=MAX_LENGTH)
     teacher = models.ForeignKey(UserProfile,

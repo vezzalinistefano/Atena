@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 import constants
-from shop.forms import CourseForm, PurchaseForm, AddCommentForm, CourseUploadForm
+from shop.forms import CourseForm, PurchaseForm, AddCommentForm, CourseUploadForm, CourseUpdateForm
 from shop.mixins import OwnershipMixin, CheckPurchaseMixin
 from shop.models import Course, Purchase, Comment
 
@@ -71,18 +71,31 @@ class CreateViewVimeo(View):
 class CourseDelete(OwnershipMixin, DeleteView):
     model = Course
     template_name = 'shop/course/delete.html'
-    success_url = reverse_lazy('shop:course-list')
+
+    def get_success_url(self):
+        return reverse_lazy('users:profile', kwargs={'pk': self.request.user.id})
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Override delete function to delete the video also on vimeo servers
+        """
+        uri = f'/videos/{Course.objects.get(id=kwargs["pk"]).url}'
+        client = vimeo.VimeoClient(
+            token=f'{constants.ACCESS_TOKEN}',
+            key=f'{constants.CLIENT_ID}',
+            secret=f'{constants.CLIENT_SECRET}'
+        )
+        client.delete(uri)
+        return super().delete(request, args, kwargs)
 
 
 class CourseUpdate(OwnershipMixin, UpdateView):
     model = Course
     template_name = 'shop/course/update.html'
-    fields = [
-        'title',
-        'price',
-        'description'
-    ]
-    success_url = reverse_lazy('shop:course-list')
+    form_class = CourseUpdateForm
+
+    def get_success_url(self):
+        return reverse_lazy('users:profile', kwargs={'pk': self.request.user.id})
 
 
 class CourseDetail(CheckPurchaseMixin, DetailView):

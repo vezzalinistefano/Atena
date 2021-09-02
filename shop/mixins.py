@@ -26,8 +26,10 @@ class CheckPurchaseMixin(UserPassesTestMixin):
         print(f'{course.teacher_id} - {check_if_teacher}')
         return check_purchase or check_if_teacher
 
-    # TODO handle no permission by rendering to a different page similar to detail.html
     def handle_no_permission(self):
+        """
+        When user hasn't purchased the video show a different detail view
+        """
         context = {'course': Course.objects.get(id=self.kwargs['pk'])}
         return render(request=self.request,
                       template_name='shop/course/detail_no_purchase.html',

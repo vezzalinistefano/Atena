@@ -8,8 +8,6 @@
 {% block content %}
     <form method="post" >
         <h1>Update your  video course</h1>
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" value="Confirm">
+        {% crispy form %}
     </form>
 {% endblock %}
