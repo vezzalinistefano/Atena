@@ -1,9 +1,11 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from users.models import UserProfile
 
 
 class Course(models.Model):
+    # TODO crea modello per le categorie
     CATEGORY_CHOICES = [
         ('Sport', 'Sport'),
         ('Finance', 'Finance'),
@@ -42,10 +44,10 @@ class Course(models.Model):
 class Purchase(models.Model):
     buyer = models.ForeignKey(UserProfile,
                               related_name='purchases',
-                              on_delete=models.PROTECT)
+                              on_delete=models.CASCADE)
     course_bought = models.ForeignKey(Course,
                                       related_name='purchases',
-                                      on_delete=models.PROTECT)
+                                      on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
@@ -66,4 +68,16 @@ class Comment(models.Model):
     def __str__(self):
         return f'{self.course.title} - {self.user.username}'
 
+# TODO models
+
+
+class Review(models.Model):
+    course = models.ForeignKey(Course,
+                               related_name='courses',
+                               on_delete=models.CASCADE)
+    vote = models.IntegerField(
+        default=5,
+        validators=[MaxValueValidator(10), MinValueValidator(1)]
+    )
+    body = models.TextField(max_length=255)
 

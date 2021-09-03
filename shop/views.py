@@ -7,8 +7,10 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
+from django_filters.views import FilterView
 
 import constants
+from filters import CourseFilter
 from shop.forms import CourseForm, PurchaseForm, AddCommentForm, CourseUploadForm, CourseUpdateForm
 from shop.mixins import OwnershipMixin, CheckPurchaseMixin
 from shop.models import Course, Purchase, Comment
@@ -33,7 +35,7 @@ class CourseCreate(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return render(request=self.request, template_name='shop/permission/not_a_teacher.html')
 
 
-class CreateViewVimeo(View):
+class CreateViewVimeo(UserPassesTestMixin, LoginRequiredMixin, View):
     form_class = CourseUploadForm
     template_name = 'shop/course/create.html'
 
@@ -66,6 +68,12 @@ class CreateViewVimeo(View):
             return HttpResponseRedirect(reverse_lazy('shop:course-list'))
         else:
             return render(request, 'shop/course/create.html', {'form': data})
+
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_teacher
+
+    def handle_no_permission(self):
+        return render(request=self.request, template_name='shop/permission/not_a_teacher.html')
 
 
 class CourseDelete(OwnershipMixin, DeleteView):
@@ -103,9 +111,10 @@ class CourseDetail(CheckPurchaseMixin, DetailView):
     template_name = 'shop/course/detail.html'
 
 
-class CourseList(ListView):
+class CourseList(FilterView):
     model = Course
     template_name = 'shop/course/list.html'
+    filterset_class = CourseFilter
 
 
 class CoursePurchase(LoginRequiredMixin, CreateView):

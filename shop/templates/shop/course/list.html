@@ -1,4 +1,5 @@
 {% extends 'base_list.html' %}
+{% load crispy_forms_tags %}
 
 {% block list_title %}
     Course Shop
@@ -7,18 +8,44 @@
     Course Shop
 {% endblock %}
 
-{# TODO CAMBIARE ASPETTO SHOP, DA TABELLA A GRIGLIA DI CARTE#}
 {% block tbody %}
-    {% for course in object_list %}
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-block dropdown-toggle" data-toggle="collapse" data-target="#collapseOne"
+                            aria-expanded="true"
+                            aria-controls="collapseOne">
+                        <strong>Filters</strong>
+                    </button>
+                </h5>
+            </div>
+        </div>
+
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <form class="form" action="" method="get">
+                    {{ filter.form|crispy }}
+                    <input type="submit" class="btn btn-success" value="Filter"/>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    {% for course in filter.qs %}
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ course.title }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{ course.teacher.username }} | {{ course.category }} |
+                <h6 class="card-subtitle mb-2 text-muted">{{ course.teacher.username }} | {{ course.category }}
+                    |
                     €{{ course.price }}</h6>
                 <p class="card-text">{{ course.description|truncatewords:"10" }}</p>
                 <a href="{% url 'shop:course-detail' course.pk %}" class="btn btn-secondary">Watch</a>
             </div>
         </div>
         <br>
+    {% empty %}
+        <h5>Looks like there's nothing in here...</h5>
     {% endfor %}
 {% endblock %}
