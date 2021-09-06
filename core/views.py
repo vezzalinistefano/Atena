@@ -4,8 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView
 
-from shop.models import Course
-
 _logger = logging.getLogger(__name__)
 
 
@@ -19,13 +17,6 @@ class NotFound(TemplateView):
 
 class Homepage(TemplateView):
     template_name = 'home.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(Homepage, self).get_context_data(**kwargs)
-        categories = [c for c in Course.CATEGORY_CHOICES]
-        print(categories)
-        context['categories'] = categories
-        return context
 
 
 class AccessForbidden(TemplateView):

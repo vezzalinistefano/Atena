@@ -6,8 +6,8 @@ from django.views.generic import DetailView, UpdateView
 
 from shop.models import Course, Purchase
 from users.forms import UserProfileForm
-from users.models import UserProfile
 from users.mixins import OwnershipMixin
+from users.models import UserProfile
 
 logger = logging.getLogger(__name__)
 
@@ -26,5 +26,12 @@ class UserProfileView(DetailView, LoginRequiredMixin):
 class UserProfileUpdateView(OwnershipMixin, UpdateView):
     model = UserProfile
     template_name = 'users/profile_update.html'
-    success_url = reverse_lazy('users:profile')
     form_class = UserProfileForm
+
+    def form_valid(self, form):
+        print(self.request.user.user_photo)
+        form.instance.user = self.request.user
+        return super(UserProfileUpdateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('users:profile', kwargs={'pk': self.request.user.id})

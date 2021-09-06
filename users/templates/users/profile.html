@@ -14,6 +14,7 @@
         <div class="col-8">
             <h4 style="font-weight: bold; text-transform: uppercase">{{ userprofile.first_name }} {{ userprofile.last_name }}</h4>
             <p>Email: {{ userprofile.email }}</p><br>
+            <p><em>{{ userprofile.bio }}</em></p>
             {% if userprofile.pk == user.pk %}
                 <a href="{% url 'users:profile-update' user.pk %}" type="button" class="btn btn-secondary">Edit
                     Profile</a>

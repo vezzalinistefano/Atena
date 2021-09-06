@@ -3,16 +3,14 @@ from django.db import models
 from users.models import UserProfile
 
 
-class Course(models.Model):
-    CATEGORY_CHOICES = [
-        ('Sport', 'Sport'),
-        ('Finance', 'Finance'),
-        ('Software Development', 'Software development'),
-        ('Cooking', 'Cooking'),
-        ('Health', 'Health'),
-        ('Personal development', 'Personal development')
-    ]
+class Category(models.Model):
+    name = models.CharField(max_length=20, unique=True)
 
+    def __str__(self):
+        return self.name
+
+
+class Course(models.Model):
     MAX_LENGTH = 60
     MIN_LENGTH = 3
 
@@ -22,9 +20,9 @@ class Course(models.Model):
                                 on_delete=models.PROTECT)
     price = models.FloatField(default=1.0)
     description = models.TextField()
-    category = models.CharField(max_length=MAX_LENGTH,
-                                choices=CATEGORY_CHOICES,
-                                default='Misc')
+    category = models.ForeignKey(Category,
+                                 related_name='courses',
+                                 on_delete=models.CASCADE)
 
     # TODO di che pacchetto fa parte il corso
     video = models.FileField(upload_to='courses/',

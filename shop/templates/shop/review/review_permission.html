@@ -1,0 +1,10 @@
+{% extends 'permission_denied.html' %}
+
+{% block reason %}
+    {% if user.is_authenticated %}
+{{ reason }}
+    {% else %}
+        You need to <a href="{% url 'authentication:register' %}">Sign in</a> or
+        <a href="{% url 'authentication:login' %}">Log in</a> to access this page
+    {% endif %}
+{% endblock %}

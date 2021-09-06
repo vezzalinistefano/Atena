@@ -2,8 +2,11 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 
-from shop.models import Course, Purchase, Comment, Review
+from shop.models import Course, Purchase, Comment, Review, Category
 from shop.validators import FileValidator
+
+
+category_choices = Category.objects.all().values_list('name', 'name')
 
 
 class CourseForm(forms.ModelForm):
@@ -34,7 +37,7 @@ class CourseUploadForm(forms.Form):
     title = forms.CharField(label='Course title', max_length=Course.MAX_LENGTH, min_length=Course.MIN_LENGTH)
     price = forms.FloatField(label='Price', initial=1.0, min_value=0.1)
     description = forms.CharField(widget=forms.Textarea, min_length=10)
-    category = forms.ChoiceField(choices=Course.CATEGORY_CHOICES)
+    category = forms.ChoiceField(choices=category_choices)
 
     file_validator = FileValidator(
         max_size=5 * (10 ** 7),

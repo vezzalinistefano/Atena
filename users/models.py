@@ -6,7 +6,7 @@ class UserProfile(AbstractUser):
     email = models.EmailField(verbose_name='Email', unique=True)
     user_photo = models.ImageField(upload_to='profiles/photos',
                                    verbose_name='Profile picture',
-                                   blank=True)
+                                   default='media/profiles/photos/default/img.png')
     is_teacher = models.BooleanField(default=False,
                                      verbose_name='Do yo want to be a teacher?')
     bio = models.TextField(default='',

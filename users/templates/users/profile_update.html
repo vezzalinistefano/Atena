@@ -6,10 +6,8 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" >
+    <form method="post" enctype="multipart/form-data">
         <h1>Edit your profile</h1>
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" value="Confirm">
+        {% crispy form %}
     </form>
 {% endblock %}

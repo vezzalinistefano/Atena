@@ -33,6 +33,7 @@
     </div>
 
     <hr>
+
     {% for course in filter.qs %}
         <div class="card">
             <div class="card-body">
@@ -40,7 +41,7 @@
                 <h6 class="card-subtitle mb-2 text-muted">{{ course.teacher.username }} | {{ course.category }}
                     |
                     €{{ course.price }}</h6>
-                <p class="card-text">{{ course.description|truncatewords:"10" }}</p>
+                <p class="card-text">{{ course.description|truncatewords:"20" }}</p>
                 <a href="{% url 'shop:course-detail' course.pk %}" class="btn btn-secondary">Details</a>
             </div>
         </div>

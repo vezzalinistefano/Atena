@@ -1,6 +1,7 @@
 import logging
 
 import vimeo
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -12,8 +13,8 @@ from django_filters.views import FilterView
 import constants
 from filters import CourseFilter
 from shop.forms import CourseForm, PurchaseForm, AddCommentForm, CourseUploadForm, CourseUpdateForm, AddReviewForm
-from shop.mixins import OwnershipMixin, CheckPurchaseMixin
-from shop.models import Course, Purchase, Comment, Review
+from shop.mixins import OwnershipMixin, CheckPurchaseMixin, AlreadyBoughtMixin, ReviewChecksMixin
+from shop.models import Course, Purchase, Comment, Review, Category
 
 logger = logging.getLogger(__name__)
 
@@ -63,8 +64,10 @@ class CreateViewVimeo(UserPassesTestMixin, LoginRequiredMixin, View):
                 teacher=request.user,
                 price=float(post_data['price']),
                 description=post_data['description'],
+                category=Category.objects.get(name=post_data['category']),
                 url=f'{uri.replace("/videos/", "")}'
             )
+            messages.success(request, 'Video uploaded correctly, it will soon be visible')
             return HttpResponseRedirect(reverse_lazy('shop:course-list'))
         else:
             return render(request, 'shop/course/create.html', {'form': data})
@@ -117,8 +120,7 @@ class CourseList(FilterView):
     filterset_class = CourseFilter
 
 
-class CoursePurchase(LoginRequiredMixin, CreateView):
-    # TODO check if the user has already bought the course
+class CoursePurchase(AlreadyBoughtMixin, CreateView):
     model = Purchase
     template_name = 'shop/purchase/complete_purchase.html'
     success_url = reverse_lazy('homepage')
@@ -170,7 +172,7 @@ class AddCommentView(CheckPurchaseMixin, CreateView):
         return super(AddCommentView, self).form_valid(form)
 
 
-class AddReviewView(CheckPurchaseMixin, CreateView):
+class AddReviewView(ReviewChecksMixin, CreateView):
     model = Review
     template_name = 'shop/review/add_review.html'
     form_class = AddReviewForm
