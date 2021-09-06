@@ -23,7 +23,6 @@ class CheckPurchaseMixin(UserPassesTestMixin):
         course = Course.objects.get(id=self.kwargs['pk'])
         check_if_teacher = course.teacher_id == self.request.user.id
 
-        print(f'{course.teacher_id} - {check_if_teacher}')
         return check_purchase or check_if_teacher
 
     def handle_no_permission(self):

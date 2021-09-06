@@ -1,37 +1,13 @@
-{#TODO parent detail page#}
-{% extends 'base.html' %}
+{% extends 'shop/course/base_detail.html' %}
 
 {% block title %}
     Watch {{ object.title }}
 {% endblock %}
 
-{% block content %}
-    <h1>{{ object.title }}</h1>
-    <h4>Teacher: {{ object.teacher }}</h4>
+{% block video %}
     <div class="embed-responsive embed-responsive-16by9">
         <iframe class="embed-responsive-item"
                 src="https://player.vimeo.com/video/{{ course.url }}?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;h=a4b02ecb2b"
                 allowfullscreen></iframe>
-    </div>
-    <br>
-    <h4>Comments:</h4>
-    <br>
-    {% for comment in course.comments.all %}
-        <strong>
-            {{ comment.user.username }} - {{ comment.date_added }}
-        </strong>
-        <br>
-        <p>
-            {{ comment.body }}
-        </p>
-        <hr>
-    {% empty %}
-        Still no comments in here, maybe you could be the first!
-    {% endfor %}
-    <br>
-    {% if user.is_authenticated %}
-        <a href="{% url 'shop:add-comment' object.pk %}">Add comment</a>
-    {% endif %}
-
     </div>
 {% endblock %}

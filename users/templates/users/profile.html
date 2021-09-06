@@ -6,9 +6,6 @@
 {% endblock %}
 
 {% block user_info %}
-
-{#    <h3 style="text-transform: uppercase">{{ userprofile.username }}'s profile</h3>#}
-
     <div class="row">
         <div class="col-4"><img src="{{ userprofile.user_photo.url }}" class="img-thumbnail rounded"
                                 style="width: 300px; height: auto"
@@ -50,6 +47,7 @@
             </td>
         </tr>
     {% empty %}
+        <br>
         <div>
             You haven't published any courses yet! <a href="{% url 'shop:course-create' %}">Upload</a> something now.
         </div>

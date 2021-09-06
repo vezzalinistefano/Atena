@@ -9,6 +9,7 @@ django-crispy-forms = "*"
 Pillow = "*"
 pyvimeo = "*"
 django-filter = "*"
+python-magic = "*"
 
 [dev-packages]
 

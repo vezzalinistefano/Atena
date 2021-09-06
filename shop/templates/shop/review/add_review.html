@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Add comment
+{% endblock %}
+
+{% block content %}
+    <h2>Add review...</h2>
+    <br>
+    {% crispy form %}
+{% endblock %}

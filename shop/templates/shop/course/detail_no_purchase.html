@@ -1,28 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'shop/course/base_detail.html' %}
 
 {% block title %}
     {{ course.title }} details
 {% endblock %}
 
-{% block content %}
-    <h1>{{ course.title }}</h1>
-    <h4>Teacher: {{ course.teacher }}</h4>
+{% block video %}
     <img class="img-fluid" src="/media/static/blocked_video.png">
-    <div>
-        <br>
-        <h4>Comments:</h4>
-        <br>
-        {% for comment in course.comments.all %}
-            <strong>
-                {{ comment.user.username }} - {{ comment.date_added }}
-            </strong>
-            <br>
-            <p>
-                {{ comment.body }}
-            </p>
-            <hr>
-        {% empty %}
-            No comments yet...
-        {% endfor %}
-    </div>
+    <br><br>
+    <a href="{% url 'shop:course-purchase' course.id %}" class="btn btn-success btn-lg">
+        Buy
+    </a>
+    <br>
 {% endblock %}

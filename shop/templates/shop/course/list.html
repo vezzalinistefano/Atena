@@ -5,7 +5,7 @@
     Course Shop
 {% endblock %}
 {% block content_title %}
-    Course Shop
+    Shop
 {% endblock %}
 
 {% block tbody %}
@@ -13,8 +13,8 @@
         <div class="card">
             <div class="card-header" id="headingOne">
                 <h5 class="mb-0">
-                    <button class="btn btn-block dropdown-toggle" data-toggle="collapse" data-target="#collapseOne"
-                            aria-expanded="true"
+                    <button class="btn btn-block dropdown-toggle collapsed" data-toggle="collapse" data-target="#collapseOne"
+                            aria-expanded="false"
                             aria-controls="collapseOne">
                         <strong>Filters</strong>
                     </button>
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
                 <form class="form" action="" method="get">
                     {{ filter.form|crispy }}
@@ -41,7 +41,7 @@
                     |
                     €{{ course.price }}</h6>
                 <p class="card-text">{{ course.description|truncatewords:"10" }}</p>
-                <a href="{% url 'shop:course-detail' course.pk %}" class="btn btn-secondary">Watch</a>
+                <a href="{% url 'shop:course-detail' course.pk %}" class="btn btn-secondary">Details</a>
             </div>
         </div>
         <br>

@@ -6,7 +6,13 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Course name</h2>
-    <p>Course resume</p>
+    <h2>Are you sure you want to buy this course?</h2>
+    <br>
+    <div>
+        <h3>{{ course.title }}</h3>
+        <strong>€{{ course.price }}</strong>
+    </div>
+    <br>
     {% crispy form %}
+    <a href="{% url 'shop:course-list' %}" class="btn btn-danger">Cancel</a>
 {% endblock %}

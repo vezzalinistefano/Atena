@@ -2,7 +2,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 
-from shop.models import Course, Purchase, Comment
+from shop.models import Course, Purchase, Comment, Review
+from shop.validators import FileValidator
 
 
 class CourseForm(forms.ModelForm):
@@ -34,7 +35,12 @@ class CourseUploadForm(forms.Form):
     price = forms.FloatField(label='Price', initial=1.0, min_value=0.1)
     description = forms.CharField(widget=forms.Textarea, min_length=10)
     category = forms.ChoiceField(choices=Course.CATEGORY_CHOICES)
-    video = forms.FileField(required=True)
+
+    file_validator = FileValidator(
+        max_size=5 * (10 ** 7),
+        content_types=('video/mp4',))
+    video = forms.FileField(required=True,
+                            validators=[file_validator])
 
 
 class CourseUpdateForm(forms.ModelForm):
@@ -79,6 +85,21 @@ class AddCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = [
+            'body',
+        ]
+
+
+class AddReviewForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'add_review_crispy_form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Add Review'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    class Meta:
+        model = Review
+        fields = [
+            'vote',
             'body',
         ]
 

@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from core.views import Maintenance, NotFound, Homepage, AccessForbidden, media_access
+from core.views import Maintenance, NotFound, Homepage, AccessForbidden
 
 urlpatterns = [
     path('', Homepage.as_view(), name='homepage'),
@@ -14,5 +14,4 @@ urlpatterns = [
     path('shop/', include('shop.urls')),
     path('users/', include('users.urls')),
     path('authentication/', include('authentication.urls')),
-    path('media/courses/<str:path>', media_access, name='media'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

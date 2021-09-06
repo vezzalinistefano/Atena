@@ -11,9 +11,9 @@ from django_filters.views import FilterView
 
 import constants
 from filters import CourseFilter
-from shop.forms import CourseForm, PurchaseForm, AddCommentForm, CourseUploadForm, CourseUpdateForm
+from shop.forms import CourseForm, PurchaseForm, AddCommentForm, CourseUploadForm, CourseUpdateForm, AddReviewForm
 from shop.mixins import OwnershipMixin, CheckPurchaseMixin
-from shop.models import Course, Purchase, Comment
+from shop.models import Course, Purchase, Comment, Review
 
 logger = logging.getLogger(__name__)
 
@@ -129,6 +129,12 @@ class CoursePurchase(LoginRequiredMixin, CreateView):
         form.instance.course_bought_id = self.kwargs['pk']
         return super(CoursePurchase, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        course = Course.objects.get(id=self.kwargs['pk'])
+        context['course'] = course
+        return context
+
 
 class SearchView(ListView):
     model = Course
@@ -162,3 +168,20 @@ class AddCommentView(CheckPurchaseMixin, CreateView):
         form.instance.user = self.request.user
         form.instance.course_id = self.kwargs['pk']
         return super(AddCommentView, self).form_valid(form)
+
+
+class AddReviewView(CheckPurchaseMixin, CreateView):
+    model = Review
+    template_name = 'shop/review/add_review.html'
+    form_class = AddReviewForm
+
+    def get_success_url(self):
+        """
+        This function provides the success url to go back to the commented course page
+        """
+        return reverse_lazy('shop:course-detail', kwargs={'pk': self.kwargs['pk']})
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.course_id = self.kwargs['pk']
+        return super(AddReviewView, self).form_valid(form)

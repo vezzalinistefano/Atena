@@ -27,7 +27,7 @@
         </div>
     {% endif %}
     <br><br>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and user.pk == userprofile.id %}
         <h4>My courses</h4>
         {% block cards %}
         {% endblock %}
