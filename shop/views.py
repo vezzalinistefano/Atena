@@ -12,9 +12,10 @@ from django_filters.views import FilterView
 
 import constants
 from filters import CourseFilter
-from shop.forms import CourseForm, PurchaseForm, AddCommentForm, CourseUploadForm, CourseUpdateForm, AddReviewForm
-from shop.mixins import OwnershipMixin, CheckPurchaseMixin, AlreadyBoughtMixin, ReviewChecksMixin
-from shop.models import Course, Purchase, Comment, Review, Category
+from shop.forms import CourseForm, PurchaseForm, AddCommentForm, CourseUploadForm, CourseUpdateForm, AddReviewForm, \
+    AddReplyForm
+from shop.mixins import OwnershipMixin, CheckPurchaseMixin, AlreadyBoughtMixin, ReviewChecksMixin, AddCommentCheckMixin
+from shop.models import Course, Purchase, Comment, Review, Category, CommentReply
 
 logger = logging.getLogger(__name__)
 
@@ -113,6 +114,17 @@ class CourseDetail(CheckPurchaseMixin, DetailView):
     model = Course
     template_name = 'shop/course/detail.html'
 
+    def get_context_data(self, **kwargs):
+        """
+        Put some context variable to hide or show the add comment/review buttons
+        """
+        context = super().get_context_data(**kwargs)
+        check_purchase = Purchase.objects.filter(course_bought_id=self.kwargs['pk'],
+                                                  buyer_id=self.request.user.id).exists()
+        context['purchased'] = check_purchase
+
+        return context
+
 
 class CourseList(FilterView):
     model = Course
@@ -155,7 +167,7 @@ class SearchView(ListView):
         return result
 
 
-class AddCommentView(CheckPurchaseMixin, CreateView):
+class AddCommentView(AddCommentCheckMixin, CreateView):
     model = Comment
     template_name = 'shop/comment/add_comment.html'
     form_class = AddCommentForm
@@ -170,6 +182,23 @@ class AddCommentView(CheckPurchaseMixin, CreateView):
         form.instance.user = self.request.user
         form.instance.course_id = self.kwargs['pk']
         return super(AddCommentView, self).form_valid(form)
+
+
+class AddReplyView(CreateView):
+    model = CommentReply
+    template_name = 'shop/comment/add_reply.html'
+    form_class = AddReplyForm
+
+    def get_success_url(self):
+        """
+        This function provides the success url to go back to the commented course page
+        """
+        return reverse_lazy('shop:course-detail', kwargs={'pk': self.kwargs['course']})
+
+    def form_valid(self, form):
+        form.instance.reply_user = self.request.user
+        form.instance.comment_id = self.kwargs['pk']
+        return super(AddReplyView, self).form_valid(form)
 
 
 class AddReviewView(ReviewChecksMixin, CreateView):

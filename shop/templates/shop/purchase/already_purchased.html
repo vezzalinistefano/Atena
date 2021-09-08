@@ -3,7 +3,7 @@
 {% block reason %}
     {% if user.is_authenticated %}
         Seems like you have already bought this course
-
+        <br>
         <a href="{% url 'shop:course-list' %}" class="btn btn-success">Back to the shop</a>
     {% else %}
         You need to <a href="{% url 'authentication:register' %}">Sign in</a> or

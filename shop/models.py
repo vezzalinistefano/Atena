@@ -1,3 +1,4 @@
+import requests
 from django.db import models
 
 from users.models import UserProfile
@@ -7,7 +8,7 @@ class Category(models.Model):
     name = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 
 class Course(models.Model):
@@ -27,11 +28,21 @@ class Course(models.Model):
     # TODO di che pacchetto fa parte il corso
     video = models.FileField(upload_to='courses/',
                              blank=True)
-    url = models.URLField()
+    url = models.CharField(max_length=50)
 
     class Meta:
         verbose_name = 'course'
         verbose_name_plural = 'courses'
+
+    @property
+    def get_thumbnail(self):
+        response = requests.get(f"http://vimeo.com/api/v2/video/{self.url}.json")
+        if response:
+            print(response.text)
+            data = response.json()
+
+            return data[0]['thumbnail_medium']
+        return "http://placehold.it/200X150"
 
     def __str__(self):
         return f'{self.title} - {self.id}'
@@ -50,19 +61,37 @@ class Purchase(models.Model):
         return f'{self.buyer.username} - {self.course_bought.title}'
 
 
-class Comment(models.Model):
-    course = models.ForeignKey(Course,
-                               related_name='comments',
-                               on_delete=models.CASCADE)
-    user = models.ForeignKey(UserProfile,
-                             related_name='comments',
-                             on_delete=models.CASCADE)
+class BaseComment(models.Model):
     body = models.TextField(max_length=180,
                             verbose_name='Write down your thoughts:')
     date_added = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        abstract = True
+
+
+class Comment(BaseComment):
+    user = models.ForeignKey(UserProfile,
+                             related_name='comments',
+                             on_delete=models.CASCADE)
+    course = models.ForeignKey(Course,
+                               related_name='comments',
+                               on_delete=models.CASCADE)
+
     def __str__(self):
         return f'{self.course.title} - {self.user.username}'
+
+
+class CommentReply(BaseComment):
+    reply_user = models.ForeignKey(UserProfile,
+                                   related_name='replies',
+                                   on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment,
+                                related_name='replies',
+                                on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.date_added}'
 
 
 class Review(models.Model):
@@ -90,4 +119,3 @@ class Review(models.Model):
     @property
     def get_vote(self):
         return self.VOTE_CHOICES[self.vote - 1][1]
-

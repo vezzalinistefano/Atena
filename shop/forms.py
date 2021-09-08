@@ -2,7 +2,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
 
-from shop.models import Course, Purchase, Comment, Review, Category
+from shop.models import Course, Purchase, Comment, Review, Category, CommentReply
 from shop.validators import FileValidator
 
 
@@ -87,6 +87,20 @@ class AddCommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
+        fields = [
+            'body',
+        ]
+
+
+class AddReplyForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'add_reply_crispy_form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Add'))
+    helper.inputs[0].field_classes = 'btn btn-success'
+
+    class Meta:
+        model = CommentReply
         fields = [
             'body',
         ]

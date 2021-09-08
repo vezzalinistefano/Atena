@@ -3,7 +3,7 @@ from django.urls import path
 
 from core import settings
 from shop.views import CourseDetail, CourseList, CourseUpdate, CourseDelete, CoursePurchase, SearchView, \
-    AddCommentView, CreateViewVimeo, AddReviewView
+    AddCommentView, CreateViewVimeo, AddReviewView, AddReplyView
 
 app_name = 'shop'
 
@@ -16,5 +16,6 @@ urlpatterns = [
                   path('course/<int:pk>/purchase', CoursePurchase.as_view(), name='course-purchase'),
                   path('results/', SearchView.as_view(), name='search-results'),
                   path('course/<int:pk>/comment', AddCommentView.as_view(), name='add-comment'),
+                  path('course/<int:course>/<int:pk>/comment/reply', AddReplyView.as_view(), name='add-comment-reply'),
                   path('course/<int:pk>/review', AddReviewView.as_view(), name='add-review'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

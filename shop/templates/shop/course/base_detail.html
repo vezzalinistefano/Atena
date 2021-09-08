@@ -3,6 +3,8 @@
 {% block content %}
     <h1 style="text-align: center">{{ course.title }}</h1>
     <h4>Teacher: {{ course.teacher }}</h4>
+    <br>
+    <h5><em>{{ course.description }}</em></h5>
 
     {% block video %}
     {% endblock %}
@@ -13,40 +15,73 @@
         <div class="card">
             <div class="card-header" id="headingOne">
                 <h5 class="mb-0">
-                    <button class="btn btn-secondary dropdown-toggle" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                            aria-controls="collapseOne">
-                        Comments
-                    </button>
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-secondary dropdown-toggle" data-toggle="collapse"
+                                    data-target="#collapseOne"
+                                    aria-expanded="true"
+                                    aria-controls="collapseOne">
+                                Comments
+                            </button>
+                        </div>
+                        <div class="col text-right">
+                            {% if user.is_authenticated and purchased or course.teacher_id == user.id %}
+                                <a class="justify-content-right" href="{% url 'shop:add-comment' course.pk %}">
+                                    <h6>Add comment</h6></a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </h5>
             </div>
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
                     {% for comment in course.comments.all %}
-                        <h5>
-                            <strong>{{ comment.user.username }}</strong> - {{ comment.date_added }}
-                        </h5>
                         <h6>
-                            {{ comment.body }}
+                            <strong>{{ comment.user.username }}</strong> - {{ comment.date_added }}
                         </h6>
+                        {{ comment.body }}
+                        {% if user.is_authenticated and purchased or course.teacher_id == user.id %}
+                            <br>
+                            <a href="{% url 'shop:add-comment-reply' course=course.pk pk=comment.pk %}">Add reply</a>
+                        {% endif %}
                         <hr>
+                        {% for reply in comment.replies.all %}
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-11">
+                                    <h6>
+                                        <strong>{{ reply.reply_user.username }}</strong> - {{ reply.date_added }}
+                                    </h6>
+                                    {{ reply.body }}
+                                </div>
+                            </div>
+                            <hr>
+                        {% endfor %}
                     {% empty %}
                         Still no comments in here, maybe you could be the first!
                     {% endfor %}
-                    <br>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'shop:add-comment' course.pk %}">Add comment</a>
-                    {% endif %}
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-0">
-                    <button class="btn btn-secondary dropdown-toggle collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="false" aria-controls="collapseTwo">
-                        Reviews
-                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-secondary dropdown-toggle collapsed" data-toggle="collapse"
+                                    data-target="#collapseTwo"
+                                    aria-expanded="false" aria-controls="collapseTwo">
+                                Reviews
+                            </button>
+                        </div>
+                        <div class="col text-right">
+                            {% if user.is_authenticated and purchased %}
+                                <a href="{% url 'shop:add-review' course.pk %}"><h6>Add review</h6></a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </h5>
             </div>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
@@ -62,10 +97,7 @@
                     {% empty %}
                         Still no reviews in here, maybe you could be the first!
                     {% endfor %}
-                    {% if user.is_authenticated %}
-                        <br>
-                        <a href="{% url 'shop:add-review' course.pk %}">Add review</a>
-                    {% endif %}
+
                 </div>
             </div>
         </div>
