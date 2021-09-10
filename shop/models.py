@@ -10,6 +10,9 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
 
 class Course(models.Model):
     MAX_LENGTH = 60
@@ -17,17 +20,13 @@ class Course(models.Model):
 
     title = models.CharField(max_length=MAX_LENGTH)
     teacher = models.ForeignKey(UserProfile,
-                                related_name='teacher',
+                                related_name='courses',
                                 on_delete=models.PROTECT)
     price = models.FloatField(default=1.0)
     description = models.TextField()
     category = models.ForeignKey(Category,
                                  related_name='courses',
                                  on_delete=models.CASCADE)
-
-    # TODO di che pacchetto fa parte il corso
-    video = models.FileField(upload_to='courses/',
-                             blank=True)
     url = models.CharField(max_length=50)
 
     class Meta:
@@ -38,9 +37,7 @@ class Course(models.Model):
     def get_thumbnail(self):
         response = requests.get(f"http://vimeo.com/api/v2/video/{self.url}.json")
         if response:
-            print(response.text)
             data = response.json()
-
             return data[0]['thumbnail_medium']
         return "http://placehold.it/200X150"
 
@@ -91,7 +88,7 @@ class CommentReply(BaseComment):
                                 on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user.username} - {self.date_added}'
+        return f'{self.reply_user.username} - {self.date_added}'
 
 
 class Review(models.Model):

@@ -9,7 +9,7 @@
     </div>
 
     <div class="text-center">
-        <h2>The best site to learn everything!</h2>
+        <h2>The best place to learn everything!</h2>
     </div>
 
     <div>
@@ -56,7 +56,6 @@
         <div>
             <h4>Top Selling Courses</h4>
             <br>
-            {{ course.get_thumbnail }}
             {% for course in best_seller %}
                 {% if forloop.counter0|divisibleby:3 %}
                     <div class="row">
@@ -75,7 +74,6 @@
             {% if forloop.counter|divisibleby:3 or forloop.last %}</div> <br><!-- row closing -->
             {% endif %}
             {% endfor %}
-
         </div>
     </div>
 {% endblock %}

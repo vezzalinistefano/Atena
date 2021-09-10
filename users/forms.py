@@ -26,10 +26,12 @@ class UserProfileForm(forms.ModelForm):
         )
 
     def save(self, commit=True):
+        # remove old profile picture
         profile_pic = UserProfile.objects.get(pk=self.instance.pk).user_photo
         instance = super().save(commit)
         if profile_pic != instance.user_photo:
             os.remove(f'media/{profile_pic}')
+        return super(UserProfileForm, self).save(commit=commit)
 
 
 def form_validation_error(form):

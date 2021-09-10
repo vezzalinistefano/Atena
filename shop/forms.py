@@ -1,30 +1,15 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
+from django.db.utils import OperationalError
 
 from shop.models import Course, Purchase, Comment, Review, Category, CommentReply
 from shop.validators import FileValidator
 
-
-category_choices = Category.objects.all().values_list('name', 'name')
-
-
-class CourseForm(forms.ModelForm):
-    helper = FormHelper()
-    helper.form_id = 'course_crispy_form'
-    helper.form_method = 'POST'
-    helper.add_input(Submit('submit', 'Submit'))
-    helper.inputs[0].field_classes = 'btn btn-success'
-
-    class Meta:
-        model = Course
-        fields = [
-            'title',
-            'description',
-            'price',
-            'category',
-            'video'
-        ]
+try:
+    category_choices = Category.objects.all().values_list('name', 'name')
+except OperationalError:
+    pass
 
 
 class CourseUploadForm(forms.Form):

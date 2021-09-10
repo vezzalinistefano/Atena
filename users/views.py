@@ -29,7 +29,6 @@ class UserProfileUpdateView(OwnershipMixin, UpdateView):
     form_class = UserProfileForm
 
     def form_valid(self, form):
-        print(self.request.user.user_photo)
         form.instance.user = self.request.user
         return super(UserProfileUpdateView, self).form_valid(form)
 

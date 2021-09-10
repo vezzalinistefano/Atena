@@ -7,9 +7,8 @@
 
 {% block user_info %}
     <div class="row">
-        <div class="col-4"><img src="{{ userprofile.user_photo.url }}" class="img-thumbnail rounded"
-                                style="width: 300px; height: auto"
-                                alt="media/profiles/photos/default/img.png">
+        <div class="col-4"><img src="{{ userprofile.user_photo.url|default_if_none:'profiles/photos/default/img.png' }}" class="img-thumbnail rounded"
+                                style="width: 300px; height: auto">
         </div>
         <div class="col-8">
             <h4 style="font-weight: bold; text-transform: uppercase">{{ userprofile.first_name }} {{ userprofile.last_name }}</h4>
@@ -63,13 +62,22 @@
 
 {% block cards %}
     {% for purchase in purchases %}
-        <div class="card" style="width: 18rem;">
+        {% if forloop.counter0|divisibleby:3 %}
+            <div class="row">
+        {% endif %}
+    <div class="col-md-4" onclick="window.location.href='{% url 'shop:course-detail' purchase.course_bought.id %}'"
+         style="cursor: pointer">
+        <div class="card">
+            <img src="{{ purchase.course_bought.get_thumbnail }}" alt="">
             <div class="card-body">
                 <h5 class="card-title">{{ purchase.course_bought.title }}</h5>
-                <p class="card-text">Made by {{ purchase.course_bought.teacher.username }}</p>
+                <h6 class="card-subtitle mb-2 text muted"> Made by {{ purchase.course_bought.teacher.username }}</h6>
                 <a href="{% url 'shop:course-detail' purchase.course_bought.pk %}" class="btn btn-primary">Watch</a>
-            </div>
-        </div>
+            </div><!-- card content -->
+        </div><!-- card -->
+    </div><!-- col-md-4 -->
+    {% if forloop.counter|divisibleby:3 or forloop.last %}</div> <br><!-- row closing -->
+    {% endif %}
     {% empty %}
         <div>
             You haven't bought any courses yet! Go to the <a href="{% url 'shop:course-list' %}">Shop</a> and find
