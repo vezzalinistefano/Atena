@@ -73,6 +73,7 @@
                 <h5 class="card-title">{{ purchase.course_bought.title }}</h5>
                 <h6 class="card-subtitle mb-2 text muted"> Made by {{ purchase.course_bought.teacher.username }}</h6>
                 <a href="{% url 'shop:course-detail' purchase.course_bought.pk %}" class="btn btn-primary">Watch</a>
+                <a href="{% url 'shop:course-detail' purchase.course_bought.pk %}" class="btn btn-primary">My review</a>
             </div><!-- card content -->
         </div><!-- card -->
     </div><!-- col-md-4 -->

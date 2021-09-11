@@ -40,9 +40,28 @@ class CheckPurchaseMixin(LoginRequiredMixin, UserPassesTestMixin):
                       context=context)
 
 
-class AddCommentCheckMixin(CheckPurchaseMixin):
+class AddCommentCheckMixin(UserPassesTestMixin):
+    def __init__(self):
+        self.check_purchase = False
+        self.check_if_teacher = False
+
+    def test_func(self):
+        self.check_purchase = (Purchase.objects.filter(course_bought_id=self.kwargs['pk'],
+                                                       buyer_id=self.request.user.id).exists())
+        self.check_if_teacher = check_if_teacher(teacher_id=self.request.user.id, course_id=self.kwargs['pk'])
+        if self.check_purchase or self.check_if_teacher:
+            return True
+        return False
+
     def handle_no_permission(self):
-        return render(request=self.request, template_name='permission_denied.html')
+        context = {'reason': ''}
+
+        if not self.request.user.is_authenticated:
+            pass
+        elif not self.check_purchase:
+            context['reason'] = 'You need to buy this course to comment it!'
+
+        return render(self.request, template_name='shop/review/review_permission.html', context=context)
 
 
 class ReviewChecksMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -59,7 +78,6 @@ class ReviewChecksMixin(LoginRequiredMixin, UserPassesTestMixin):
 
         self.check_already_reviewed = (Review.objects.filter(course_id=self.kwargs['pk'],
                                                              author_id=self.request.user.id).exists())
-
         if (self.check_purchase and self.check_already_reviewed) or self.check_if_teacher:
             return False
         return True
@@ -97,7 +115,7 @@ class AlreadyBoughtMixin(LoginRequiredMixin, UserPassesTestMixin):
 
     def handle_no_permission(self):
         if self.is_teacher:
-            return render(request=self.request, template_name='permission_denied.html')
+            return render(request=self.request, template_name='shop/purchase/teacher_purchase_own_course.html')
         else:
             return render(request=self.request,
                           template_name='shop/purchase/already_purchased.html')

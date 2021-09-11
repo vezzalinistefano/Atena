@@ -38,7 +38,8 @@
                 <div class="card-body">
                     {% for comment in course.comments.all %}
                         <h6>
-                            <strong>{{ comment.user.username }}</strong> - {{ comment.date_added }}
+                            <a href="{% url 'users:profile' comment.user.id %}">
+                                <strong>{{ comment.user.username }}</strong></a> - {{ comment.date_added }}
                         </h6>
                         {{ comment.body }}
                         {% if user.is_authenticated and purchased or course.teacher_id == user.id %}
@@ -51,7 +52,9 @@
                                 <div class="col-1"></div>
                                 <div class="col-11">
                                     <h6>
-                                        <strong>{{ reply.reply_user.username }}</strong> - {{ reply.date_added }}
+                                        <a href="{% url 'users:profile' reply.reply_user.id %}">
+                                            <strong>{{ reply.reply_user.username }}</strong></a>
+                                        - {{ reply.date_added }}
                                     </h6>
                                     {{ reply.body }}
                                 </div>
@@ -67,7 +70,6 @@
         <div class="card">
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-0">
-
                     <div class="row">
                         <div class="col">
                             <button class="btn btn-secondary dropdown-toggle collapsed" data-toggle="collapse"
@@ -77,7 +79,7 @@
                             </button>
                         </div>
                         <div class="col text-right">
-                            {% if user.is_authenticated and purchased %}
+                            {% if user.is_authenticated and purchased and not reviewed %}
                                 <a href="{% url 'shop:add-review' course.pk %}"><h6>Add review</h6></a>
                             {% endif %}
                         </div>
@@ -87,12 +89,12 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                 <div class="card-body">
                     {% for review in course.reviews.all %}
-                        <h5>
-                            <strong>{{ review.author.username }}</strong> - {{ review.date_added }}
-                        </h5>
                         <h6>
-                            <strong>{{ review.get_vote }}</strong> | {{ review.body }}
+                            <a href="{% url 'users:profile' review.author.id %}">
+                                <strong>{{ review.author.username }}</strong> - {{ review.date_added }}
+                            </a>
                         </h6>
+                        <strong>{{ review.get_vote }}</strong> | {{ review.body }}
                         <hr>
                     {% empty %}
                         Still no reviews in here, maybe you could be the first!

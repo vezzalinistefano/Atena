@@ -1,6 +1,7 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Button, HTML
 from django import forms
+from django.db.models.functions import window
 from django.db.utils import OperationalError
 
 from shop.models import Course, Purchase, Comment, Review, Category, CommentReply
@@ -36,6 +37,7 @@ class CourseUpdateForm(forms.ModelForm):
     helper.form_id = 'add_comment_crispy_form'
     helper.form_method = 'POST'
     helper.add_input(Submit('submit', 'Update'))
+
     helper.inputs[0].field_classes = 'btn btn-success'
 
     class Meta:

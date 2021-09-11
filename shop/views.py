@@ -107,7 +107,10 @@ class CourseDetail(CheckPurchaseMixin, DetailView):
         try:
             check_purchase = Purchase.objects.filter(course_bought_id=self.kwargs['pk'],
                                                      buyer_id=self.request.user.id).exists()
+            check_review = Review.objects.filter(author_id=self.request.user.id,
+                                                 course_id=self.kwargs['pk']).exists()
             context['purchased'] = check_purchase
+            context['reviewed'] = check_review
         except OperationalError:
             pass  # happens when db doesn't exist yet
 
@@ -155,7 +158,7 @@ class AddCommentView(AddCommentCheckMixin, CreateView):
         return super(AddCommentView, self).form_valid(form)
 
 
-class AddReplyView(CreateView):
+class AddReplyView(AddCommentCheckMixin, CreateView):
     model = CommentReply
     template_name = 'shop/comment/add_reply.html'
     form_class = AddReplyForm

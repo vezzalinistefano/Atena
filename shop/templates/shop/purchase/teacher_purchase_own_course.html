@@ -1,0 +1,12 @@
+{% extends 'permission_denied.html' %}
+
+{% block reason %}
+    {% if user.is_authenticated %}
+        You can't purchase your own course!
+        <br>
+        <a href="{% url 'shop:course-list' %}" class="btn btn-success">Back to the shop</a>
+    {% else %}
+        You need to <a href="{% url 'authentication:register' %}">Sign in</a> or
+        <a href="{% url 'authentication:login' %}">Log in</a> to access this page
+    {% endif %}
+{% endblock %}

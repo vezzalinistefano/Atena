@@ -33,6 +33,9 @@ class Course(models.Model):
         verbose_name = 'course'
         verbose_name_plural = 'courses'
 
+    def check_if_teacher(self, user_id):
+        return self.teacher_id == user_id
+
     @property
     def get_thumbnail(self):
         response = requests.get(f"http://vimeo.com/api/v2/video/{self.url}.json")
