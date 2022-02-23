@@ -28,7 +28,7 @@ class Homepage(TemplateView):
         context['categories'] = categories
 
         results = Purchase.objects.values('course_bought_id').annotate(dcount=Count('course_bought_id')).order_by(
-            '-dcount')[:5]
+            '-dcount')[:6]
         best_sellers = []
         for result in results:
             e = Course.objects.get(pk=result['course_bought_id'])

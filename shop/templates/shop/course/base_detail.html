@@ -26,7 +26,7 @@
                         </div>
                         <div class="col text-right">
                             {% if user.is_authenticated and purchased or course.teacher_id == user.id %}
-                                <a class="justify-content-right" href="{% url 'shop:add-comment' course.pk %}">
+                                <a class="justify-content-right" href="{% url 'forum:add-comment' course.pk %}">
                                     <h6>Add comment</h6></a>
                             {% endif %}
                         </div>
@@ -40,11 +40,12 @@
                         <h6>
                             <a href="{% url 'users:profile' comment.user.id %}">
                                 <strong>{{ comment.user.username }}</strong></a> - {{ comment.date_added }}
+                            {% if comment.user == course.teacher %} <em>(Teacher)</em> {% endif %}
                         </h6>
                         {{ comment.body }}
                         {% if user.is_authenticated and purchased or course.teacher_id == user.id %}
                             <br>
-                            <a href="{% url 'shop:add-comment-reply' course=course.pk pk=comment.pk %}">Add reply</a>
+                            <a href="{% url 'forum:add-comment-reply' course_pk=course.pk pk=comment.pk %}">Add reply</a>
                         {% endif %}
                         <hr>
                         {% for reply in comment.replies.all %}
@@ -54,7 +55,7 @@
                                     <h6>
                                         <a href="{% url 'users:profile' reply.reply_user.id %}">
                                             <strong>{{ reply.reply_user.username }}</strong></a>
-                                        - {{ reply.date_added }}
+                                        - {{ reply.date_added }} {% if reply.reply_user == course.teacher %} <em>(Teacher)</em> {% endif %}
                                     </h6>
                                     {{ reply.body }}
                                 </div>
@@ -80,7 +81,7 @@
                         </div>
                         <div class="col text-right">
                             {% if user.is_authenticated and purchased and not reviewed %}
-                                <a href="{% url 'shop:add-review' course.pk %}"><h6>Add review</h6></a>
+                                <a href="{% url 'forum:add-review' course.pk %}"><h6>Add review</h6></a>
                             {% endif %}
                         </div>
                     </div>

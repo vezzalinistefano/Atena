@@ -1,0 +1,112 @@
+@startuml
+
+    class "Spiegazione dei simboli usati" as DESCRIPTION #FFF {
+    - AutoField (identifiers)
+    ..
+    + Regular field (anything)
+    ..
+    ~ ForeignKey (OneToOne, OneToMany)
+    --
+}
+
+
+class "shop.Category <Shop>" as shop.Category #d6f4ed {
+    category
+    --
+    - id (BigAutoField)
+    + name (CharField)
+    --
+}
+
+
+class "shop.Course <Shop>" as shop.Course #d6f4ed {
+    course
+    --
+    - id (BigAutoField)
+    + title (CharField)
+    ~ teacher (ForeignKey)
+    + price (FloatField)
+    + description (TextField)
+    ~ category (ForeignKey)
+    + url (CharField)
+    --
+}
+shop.Course *-- users.UserProfile
+shop.Course *-- shop.Category
+
+
+class "shop.Purchase <Shop>" as shop.Purchase #d6f4ed {
+    purchase
+    --
+    - id (BigAutoField)
+    ~ buyer (ForeignKey)
+    ~ course_bought (ForeignKey)
+    + date (DateTimeField)
+    --
+}
+shop.Purchase *-- users.UserProfile
+shop.Purchase *-- shop.Course
+
+class AbstractUser #d6def4
+
+class "users.UserProfile <Users>" as users.UserProfile #d6def4 {
+    User
+    --
+    - id (BigAutoField)
+    + password (CharField)
+    + username (CharField)
+    + first_name (CharField)
+    + last_name (CharField)
+    + email (EmailField)
+    + user_photo (ImageField)
+    + is_teacher (BooleanField)
+    + bio (TextField)
+    --
+}
+
+users.UserProfile <|-- AbstractUser
+
+class "forum.Comment <Forum>" as forum.Comment #e6f4d6 {
+    comment
+    --
+    - id (BigAutoField)
+    + body (TextField)
+    + date_added (DateTimeField)
+    ~ user (ForeignKey)
+    ~ course (ForeignKey)
+    --
+}
+forum.Comment *-- users.UserProfile
+forum.Comment  *-- shop.Course
+
+
+class "forum.CommentReply <Forum>" as forum.CommentReply #e6f4d6 {
+    Reply
+    --
+    - id (BigAutoField)
+    + body (TextField)
+    + date_added (DateTimeField)
+    ~ reply_user (ForeignKey)
+    ~ comment (ForeignKey)
+    --
+}
+forum.CommentReply *-- users.UserProfile
+forum.CommentReply *-- forum.Comment
+
+
+class "forum.Review <Forum>" as forum.Review #e6f4d6 {
+    review
+    --
+    - id (BigAutoField)
+    ~ author (ForeignKey)
+    ~ course (ForeignKey)
+    + vote (IntegerField)
+    + date_added (DateTimeField)
+    + body (TextField)
+    --
+}
+forum.Review *-- users.UserProfile
+forum.Review *-- shop.Course
+
+
+@enduml

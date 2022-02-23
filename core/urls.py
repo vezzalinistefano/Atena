@@ -12,6 +12,7 @@ urlpatterns = [
     path('404-not-found', NotFound.as_view(), name='404-not-found'),
     path('forbidden', AccessForbidden.as_view(), name='access-forbidden'),
     path('shop/', include('shop.urls')),
+    path('review/', include('forum.urls')),
     path('users/', include('users.urls')),
     path('authentication/', include('authentication.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,17 @@
+@startuml
+
+class AbstractUser {
+}
+
+class Userprofile {
+    #EmailField email
+    #ImageField user_photo
+    #Boolean is_teacher
+    #TextField bio
+}
+
+
+
+AbstractUser <|-- Userprofile
+
+@enduml

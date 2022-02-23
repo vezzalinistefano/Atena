@@ -7,7 +7,8 @@
 
 {% block user_info %}
     <div class="row">
-        <div class="col-4"><img src="{{ userprofile.user_photo.url|default_if_none:'profiles/photos/default/img.png' }}" class="img-thumbnail rounded"
+        <div class="col-4"><img src="{{ userprofile.user_photo.url|default_if_none:'profiles/photos/default/img.png' }}"
+                                class="img-thumbnail rounded"
                                 style="width: 300px; height: auto">
         </div>
         <div class="col-8">
@@ -73,7 +74,13 @@
                 <h5 class="card-title">{{ purchase.course_bought.title }}</h5>
                 <h6 class="card-subtitle mb-2 text muted"> Made by {{ purchase.course_bought.teacher.username }}</h6>
                 <a href="{% url 'shop:course-detail' purchase.course_bought.pk %}" class="btn btn-primary">Watch</a>
-                <a href="{% url 'shop:course-detail' purchase.course_bought.pk %}" class="btn btn-primary">My review</a>
+                {% if purchase.get_user_review != '' %}
+                    <a href="{% url 'forum:update-review' purchase.get_user_review %}" class="btn btn-primary">My
+                        review</a>
+                {% else %}
+                    <a href="{% url 'forum:add-review' purchase.course_bought.pk %}" class="btn btn-primary">Add
+                        review</a>
+                {% endif %}
             </div><!-- card content -->
         </div><!-- card -->
     </div><!-- col-md-4 -->

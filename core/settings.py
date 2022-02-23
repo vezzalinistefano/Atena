@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django_filters',
     'shop.apps.ShopConfig',
     'users.apps.UsersConfig',
-    'authentication.apps.AuthenticationConfig'
+    'authentication.apps.AuthenticationConfig',
+    'forum.apps.ForumConfig',
 ]
 
 # Strato SW intermedio, si posizionano tra la business intelligence e ció che viene scritto dal programmatore

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-from shop.models import Course, Purchase, Comment, Category
+from shop.models import Course, Purchase, Category
 
 
 class CustomCourseAdmin(ModelAdmin):
@@ -12,12 +12,6 @@ class CustomCourseAdmin(ModelAdmin):
     search_fields = ('title', 'teacher', 'price', 'category')
 
 
-class CustomCommentAdmin(ModelAdmin):
-    model = Comment
-    list_display = ('user', 'course', 'date_added',)
-    search_fields = ('user',)
-
-
 class PurchaseCustomAdmin(ModelAdmin):
     model = Purchase
     list_display = ('buyer', 'course_bought', 'date')
@@ -26,5 +20,4 @@ class PurchaseCustomAdmin(ModelAdmin):
 
 admin.site.register(Course, CustomCourseAdmin)
 admin.site.register(Purchase, PurchaseCustomAdmin)
-admin.site.register(Comment, CustomCommentAdmin)
 admin.site.register(Category)

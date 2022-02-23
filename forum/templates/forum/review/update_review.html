@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Update review
+{% endblock %}
+
+{% block content %}
+    <form method="post" >
+        <h1>Update your review</h1>
+        {% crispy form %}
+        <a class="btn btn-secondary" href="{% url 'users:profile' user.id %}">Go back</a>
+    </form>
+{% endblock %}
